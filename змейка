@@ -2,6 +2,7 @@ import pygame
 import random
 from pygame.locals import *
 
+
 # Constants
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
@@ -116,7 +117,7 @@ class Snake(GameObject):
         """Draw the snake on the surface."""
         for position in self.positions:
             rect = pygame.Rect(
-                (position[0], position[1]),
+                (position[0], self.position[1]),
                 (GRID_SIZE, GRID_SIZE)
             )
             pygame.draw.rect(surface, self.body_color, rect)
@@ -177,7 +178,9 @@ def main():
             max_length = max(max_length, snake.length)
             
             # Update window title with max length
-            pygame.display.set_caption(f'Изгиб Питона - Рекорд: {max_length}')
+            pygame.display.set_caption(
+                f'Изгиб Питона - Рекорд: {max_length}'
+            )
             
             # Find new position for apple that's not on snake
             while True:
