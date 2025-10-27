@@ -1,6 +1,6 @@
 import pygame
-import random
-from pygame.locals import *
+from random import randint
+from pygame.locals import KEYDOWN, K_ESCAPE, K_UP, K_DOWN, K_LEFT, K_RIGHT, QUIT
 
 
 # Constants
@@ -47,8 +47,8 @@ class Apple(GameObject):
     def randomize_position(self):
         """Set apple to a random position on the grid."""
         self.position = (
-            random.randint(0, GRID_WIDTH - 1) * GRID_SIZE,
-            random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE
+            randint(0, GRID_WIDTH - 1) * GRID_SIZE,
+            randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         )
     
     def draw(self, surface):
@@ -103,8 +103,10 @@ class Snake(GameObject):
             return
         
         # Store last position for cleaning
-        self.last = (self.positions[-1] if len(self.positions) == self.length 
-                     else None)
+        if len(self.positions) == self.length:
+            self.last = self.positions[-1]
+        else:
+            self.last = None
         
         # Add new head
         self.positions.insert(0, new_head)
@@ -133,7 +135,15 @@ class Snake(GameObject):
 
 
 def handle_keys(snake):
-    """Handle keyboard input for snake direction."""
+    """
+    Handle keyboard input for snake direction.
+    
+    Args:
+        snake: Snake object to control
+        
+    Returns:
+        bool: False if game should quit, True otherwise
+    """
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -178,9 +188,8 @@ def main():
             max_length = max(max_length, snake.length)
             
             # Update window title with max length
-            pygame.display.set_caption(
-                f'Изгиб Питона - Рекорд: {max_length}'
-            )
+            title = f'Изгиб Питона - Рекорд: {max_length}'
+            pygame.display.set_caption(title)
             
             # Find new position for apple that's not on snake
             while True:
